@@ -48,28 +48,30 @@ var app = (function() {
 		inputId = document.getElementById('endpointInput');
 		inputId.parentNode.classList.remove('has-success', 'has-error');
 
-		try {
-			// Test Connection
-			var url = inputId.value;
-			var transport = new Thrift.TXHRTransport(url);
-			var protocol = new Thrift.TJSONProtocol(transport);
-			var client = new GeolocationServiceClient(protocol);
-			client.getCell(0,0,0,null,function(){});
+		// Test Connection
+		var url = inputId.value;
+		var transport = new Thrift.TXHRTransport(url);
+		var protocol = new Thrift.TJSONProtocol(transport);
+		var client = new GeolocationServiceClient(protocol);
+		client.getCell(0,0,0,function(cell) {
 
-			// Success!
-			endpoint = url;
-			inputId.parentNode.classList.add('has-success');
-			document.getElementById('apiSelect').style.display = "";
-			document.getElementById('queryParameterForm').style.display = "";
-			document.getElementById('resultsForm').style.display = "";
-			
-		} catch (e) {
-			// Failure
-			inputId.parentNode.classList.add('has-error');
-			document.getElementById('apiSelect').style.display = "None";
-			document.getElementById('queryParameterForm').style.display = "None";
-			document.getElementById('resultsForm').style.display = "None";
-		}
+			if (Array.isArray(cell)) {
+				// Success!
+				endpoint = url;
+				inputId.parentNode.classList.add('has-success');
+				document.getElementById('apiSelect').style.display = "";
+				document.getElementById('queryParameterForm').style.display = "";
+				document.getElementById('resultsForm').style.display = "";
+			} else {
+
+				// Failure
+				inputId.parentNode.classList.add('has-error');
+				document.getElementById('apiSelect').style.display = "None";
+				document.getElementById('queryParameterForm').style.display = "None";
+				document.getElementById('resultsForm').style.display = "None";
+				console.log("Stacktrace: " + cell);
+			}
+		});
 	}
 
 	function changeAPI() {
