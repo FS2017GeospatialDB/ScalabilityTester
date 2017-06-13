@@ -45,6 +45,7 @@ var app = (function() {
 	/* Public Methods */
 	function validateEndpoint(inputId) {
 		// Clear User Feedback on Endpoint URL
+		inputId = document.getElementById('endpointInput');
 		inputId.parentNode.classList.remove('has-success', 'has-error');
 
 		try {
@@ -66,6 +67,7 @@ var app = (function() {
 			// Failure
 			inputId.parentNode.classList.add('has-error');
 			document.getElementById('apiSelect').style.display = "None";
+			document.getElementById('queryParameterForm').style.display = "None";
 			document.getElementById('resultsForm').style.display = "None";
 		}
 	}
